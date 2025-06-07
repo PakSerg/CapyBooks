@@ -20,8 +20,8 @@ import { RouterLink, RouterView } from 'vue-router'
         <div class="right-part">
             <nav>
                 <RouterLink class="font-special" to="/">Главная</RouterLink>
-                <RouterLink class="font-special" to="/about">Книги</RouterLink>
-                <RouterLink class="font-special" to="/about">Список чтения</RouterLink>
+                <RouterLink class="font-special" to="/books">Книги</RouterLink>
+                <RouterLink class="font-special" to="/reading-list">Список чтения</RouterLink>
                 <RouterLink class="font-special" to="/about">Статистика</RouterLink>
                 <RouterLink class="font-special" to="/about">Вход</RouterLink>
             </nav>

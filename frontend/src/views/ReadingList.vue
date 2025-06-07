@@ -5,7 +5,7 @@
 <template>
   <main>
     <section class="container">
-      <h1 class="font-special">Это домашняя страница</h1>
+      <h1 class="font-special">Ваш список чтения</h1>
     </section>
   </main>
 </template>
