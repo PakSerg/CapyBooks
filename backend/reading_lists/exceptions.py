@@ -1,0 +1,3 @@
+
+class BookIsAlreadyAddedError(Exception): 
+    pass 

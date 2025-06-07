@@ -23,4 +23,5 @@ urlpatterns = [
 
     path('books/', include('books.urls', namespace='books')),
     path('users/', include('users.urls', namespace='users')),
+    path('reading-list/', include('reading_lists.urls', namespace='reading_lists')),
 ]
