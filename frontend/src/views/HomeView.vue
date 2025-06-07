@@ -1,9 +1,11 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <section class="container">
+      <h1>Это домашняя страница</h1>
+    </section>
   </main>
 </template>
