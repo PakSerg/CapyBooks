@@ -6,6 +6,6 @@ app_name = 'books'
 
 
 urlpatterns = [
-    path('catalog/', CatalogView.as_view(), name='catalog'), 
+    path('', CatalogView.as_view(), name='catalog'), 
     path('<str:slug>/', BookView.as_view(), name='book'), 
 ]
