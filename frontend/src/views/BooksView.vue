@@ -10,6 +10,7 @@ export default {
   data() {
     return {
       books: [],
+      userBooks: [],
       genres: [],
       loading: false,
       error: null
@@ -21,6 +22,7 @@ export default {
       try {
         const response = await axios.get('http://localhost:8000/books')
         this.books = response.data.books;
+        this.userBooks = response.data.user_books || [];
         console.log(response.data)
       } catch (error) {
         this.error = 'Ошибка при загрузке книг'
@@ -35,6 +37,15 @@ export default {
         this.genres = response.data.genres;
       } catch (error) {
         console.error('Ошибка при загрузке жанров')
+      }
+    },
+    handleBookAdded(bookId) {
+      this.userBooks.push(bookId);
+    },
+    handleBookRemoved(bookId) {
+      const index = this.userBooks.indexOf(bookId);
+      if (index > -1) {
+        this.userBooks.splice(index, 1);
       }
     }
   },
@@ -64,13 +75,15 @@ export default {
             {{ error }}
           </div>
           <div v-if="loading" class="loader">
-
           </div>
           <div v-else class="books-cards">
             <BookCard
               v-for="book in books"
               :key="book.id"
               :book="book"
+              :is-in-user-list="userBooks.includes(book.id)"
+              @book-added="handleBookAdded"
+              @book-removed="handleBookRemoved"
             />
           </div>
         </div>

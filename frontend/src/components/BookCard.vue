@@ -7,19 +7,52 @@ export default {
     book: {
       type: Object,
       required: true
+    },
+    isInUserList: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      isAdding: false,
+      isRemoving: false
     }
   },
   methods: {
     async handleAddToCart() {
+      if (this.isInUserList) {
+        await this.removeFromList();
+        return;
+      }
+      
+      this.isAdding = true;
       try {
         await axios.post('http://localhost:8000/reading-list/add-book/', {
           book_id: this.book.id
         });
         console.log('Книга добавлена в список для чтения:', this.book.name);
+        this.$emit('book-added', this.book.id);
       } catch (error) {
         console.error('Ошибка при добавлении книги в список для чтения:', error);
+      } finally {
+        this.isAdding = false;
       }
     },
+    async removeFromList() {
+      this.isRemoving = true;
+      try {
+        await axios.post('http://localhost:8000/reading-list/delete-book/', {
+          book_id: this.book.id
+        });
+        console.log('Книга удалена из списка для чтения:', this.book.name);
+        this.$emit('book-removed', this.book.id);
+      } catch (error) {
+        console.error('Ошибка при удалении книги из списка для чтения:', error);
+      } finally {
+        this.isRemoving = false;
+      }
+    }
   }
 }
 </script>
@@ -55,8 +88,15 @@ export default {
         </div>
       </div>
       <div class="book-actions">
-        <button @click="handleAddToCart" class="add-book">
-          Добавить
+        <button 
+          @click="handleAddToCart" 
+          class="add-book"
+          :class="{ 
+            'in-list': isInUserList, 
+          }"
+          :disabled="isAdding || isRemoving"
+        >
+        {{ isInUserList ? 'В списке' : 'Добавить' }}
         </button>
       </div>
     </div>
@@ -87,7 +127,6 @@ export default {
     height: 100%;
     object-fit: cover;
 }
-
 
 .book-info {
     display: flex;
@@ -130,9 +169,25 @@ export default {
     font-size: 14px;
     color: white;
     transition: all 0.3s ease;
+    width: 100%;
 }
-.add-book:hover {
+.add-book:hover:not(:disabled) {
     background-color: var(--pale-color);
+}
+.add-book:disabled {
+    cursor: default;
+    opacity: 0.7;
+}
+.add-book.in-list {
+  background-color: #444849;
+}
+.add-book.in-list:hover {
+    background-color: var(--pale-color);
+}
+.add-book.adding,
+.add-book.removing {
+    background-color: var(--pale-color);
+    cursor: wait;
 }
 .book-actions {
     display: flex;
