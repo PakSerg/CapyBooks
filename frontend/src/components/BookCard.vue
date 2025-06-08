@@ -172,7 +172,7 @@ export default {
     opacity: 0.7;
 }
 .add-book.in-list {
-  background-color: #444849;
+  background-color: #686a6b;
 }
 .add-book.in-list:hover {
     background-color: var(--pale-color);

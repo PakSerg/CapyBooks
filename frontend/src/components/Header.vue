@@ -91,7 +91,37 @@ header .right-part nav a {
     color: var(--dark-color);
     font-size: 18px;
     font-weight: 500;
+    position: relative;
+    transition: all 0.3s ease;
 }
+
+header .right-part nav a.router-link-active {
+    color: var(--accent-color);
+}
+
+header .right-part nav a.router-link-active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--dark-color);
+    border-radius: 2px;
+    animation: underline 0.3s ease forwards;
+}
+
+@keyframes underline {
+    from {
+        transform: scaleX(0);
+        transform-origin: left;
+    }
+    to {
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+}
+
 .header-logo-wrapper {
     overflow: hidden;
     width: 64px;

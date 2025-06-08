@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from .models import UserBook, UserBookStatus
 from .exceptions import BookIsAlreadyAddedError
 from datetime import datetime
+from .serializers import serialize_user_book
 from books.serializers import serialize_book
 
 
@@ -18,7 +19,22 @@ class ReadingListView(APIView):
         user_books = UserBook.objects.select_related('book', 'status').filter(user=request.user)
         result = {
             'books': [
-                serialize_book(user_book.book) for user_book in user_books
+                serialize_user_book(user_book) for user_book in user_books
+            ]
+        }
+        return JsonResponse(result)
+    
+
+class StatusesView(APIView): 
+    def get(self, request): 
+        statuses = UserBookStatus.objects.all()
+        result = {
+            'statuses': [
+                {
+                    'id': status.id, 
+                    'name': status.name 
+                }
+                for status in statuses
             ]
         }
         return JsonResponse(result)
