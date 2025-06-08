@@ -20,7 +20,14 @@ main {
     
 }
 
+h1 {
+    font-size: 32px;
+}
 
+
+body {
+    color: var(--dark-color)
+}
 
 
 .font-special {

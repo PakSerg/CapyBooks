@@ -32,7 +32,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <style scoped>
 header {
-    height: 90px;
+    height: 96px;
     position: fixed;
     top: 0;
     left: 0;
@@ -44,7 +44,7 @@ header .container {
     align-items: center;
     height: 100%;
     gap: 40px;
-    padding: 10px;
+    padding: 12px 0px;
 }
 
 header .left-part {
@@ -64,7 +64,7 @@ header .right-part nav a {
 }
 .header-logo-wrapper {
     overflow: hidden;
-    width: 68px;
+    width: 64px;
     border-radius: 30px;
 
     transition: all 0.3s ease;
