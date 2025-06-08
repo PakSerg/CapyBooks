@@ -8,9 +8,23 @@ export default {
       username: ''
     };
   },
+  methods: {
+    async logout() {
+        await AuthService.logout();
+        this.updateAuthState();
+        console.log('Вышел')
+    },
+    updateAuthState() {
+      this.isAuthenticated = AuthService.isAuthenticated();
+      this.username = AuthService.getUsername();
+    }
+  },
   created() {
-    this.isAuthenticated = AuthService.isAuthenticated();
-    this.username = AuthService.getUsername();
+    this.updateAuthState();
+    window.addEventListener('auth-state-changed', this.updateAuthState);
+  },
+  beforeUnmount() {
+    window.removeEventListener('auth-state-changed', this.updateAuthState);
   }
 }
 </script>
@@ -33,9 +47,11 @@ export default {
                 <RouterLink class="font-special" to="/">Главная</RouterLink>
                 <RouterLink class="font-special" to="/books">Книги</RouterLink>
                 <RouterLink class="font-special" to="/reading-list">Список чтения</RouterLink>
-                <RouterLink class="font-special" to="/about">Статистика</RouterLink>
-                <RouterLink class="font-special" to="/auth/login">Вход</RouterLink>
-                <p class="font-special">{{ username }}</p>
+                <RouterLink v-if="isAuthenticated" class="font-special" to="/about">Статистика</RouterLink>
+                <RouterLink v-if="!isAuthenticated" class="font-special" to="/auth/login">Вход</RouterLink>
+                <div v-if="isAuthenticated" class="logout-button" @click="logout">
+                    <img src="/logout-icon.svg" alt="">
+                </div>
             </nav>
         </div>
     </div>
@@ -101,5 +117,14 @@ header .right-part nav a {
 .header-logo-wrapper
 .header-logo-wrapper img {
     object-fit: cover;
+}
+.logout-button {
+    transition: all 0.3s ease;
+    padding: 12px;
+    border-radius: 100px;
+    cursor: pointer;
+}
+.logout-button:hover {
+    background-color: rgb(29, 30, 31, 0.1);
 }
 </style>

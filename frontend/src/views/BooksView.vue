@@ -60,11 +60,11 @@ export default {
           </p>
         </div>
         <div class="main-container">
-          <div v-if="loading" class="loading">
-            Загрузка...
-          </div>
-          <div v-else-if="error" class="error">
+          <div v-if="error" class="error">
             {{ error }}
+          </div>
+          <div v-if="loading" class="loader">
+
           </div>
           <div v-else class="books-cards">
             <BookCard

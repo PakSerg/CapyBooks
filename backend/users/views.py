@@ -31,13 +31,16 @@ class RegisterView(View):
                 username=username,
                 password=password
             )
+            
+            token = Token.objects.create(user=user)
 
             return JsonResponse({
                 'message': 'Пользователь успешно зарегистрирован',
                 'user': {
                     'id': user.id,
                     'username': user.username,
-                }
+                },
+                'auth_token': token.key
             }, status=201)
 
         except json.JSONDecodeError:

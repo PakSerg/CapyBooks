@@ -12,27 +12,26 @@ export default {
     }
   },
   methods: {
-    async login() {
+    async register() {
       try {
-        const response = await axios.post('http://localhost:8000/users/auth/login/', {
+        const response = await axios.post('http://localhost:8000/users/auth/register/', {
           username: this.username,
           password: this.password
         });
         
         const token = response.data.auth_token;
-        console.log(token)
         localStorage.setItem('authToken', token);
         axios.defaults.headers.common['Authorization'] = `Token ${token}`;
 
         localStorage.setItem('username', response.data.user.username);
 
-        console.log('Успешный вход!', response.data);
+        console.log('Успешная регистрация!', response.data);
         this.error = null;
         AuthService.notifyAuthStateChanged();
         router.push('/');
       } catch (error) {
-        this.error = 'Неверный логин или пароль';
-        console.error('Ошибка входа:', error.response ? error.response.data : error.message);
+        this.error = error.response?.data?.error || 'Ошибка при регистрации';
+        console.error('Ошибка регистрации:', error.response ? error.response.data : error.message);
       }
     }
   }
@@ -42,8 +41,8 @@ export default {
 <template>
   <main>
     <section class="container login-container">
-        <form @submit.prevent="login">
-            <h1 class="font-special">Вход</h1>
+        <form @submit.prevent="register">
+            <h1 class="font-special">Регистрация</h1>
             <div class="input-container">
                 <label class="font-special" for="username">Логин</label>
                 <input type="text" id="username" name="username" v-model="username">
@@ -53,9 +52,8 @@ export default {
                 <input type="password" id="password" name="password" v-model="password">
             </div>
             <div class="button-container">
-                <button type="submit" class="font-special">Войти</button>
-
-                <RouterLink to="/auth/register" class="font-special">Ещё нет аккаунта?</RouterLink>
+                <button type="submit" class="font-special">Зарегистрироваться</button>
+                <RouterLink to="/auth/login" class="font-special">Уже есть аккаунт?</RouterLink>
             </div>
             <p v-if="error" class="error-message font-special">{{ error }}</p>
         </form>
@@ -112,7 +110,7 @@ button {
 form * {
     font-family: var(--font-special), sans-serif;
 }
-.button-container a {
+.button-container p {
     font-size: 14px;
     color: var(--pale-color);
 }
