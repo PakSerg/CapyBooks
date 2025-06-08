@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.views import View 
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 import json
 from books.models import Book
@@ -10,7 +11,9 @@ from datetime import datetime
 from books.serializers import serialize_book
 
 
-class ReadingListView(View): 
+class ReadingListView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request): 
         user_books = UserBook.objects.select_related('book', 'status').filter(user=request.user)
         result = {
@@ -21,7 +24,9 @@ class ReadingListView(View):
         return JsonResponse(result)
 
 
-class AddBookView(View): 
+class AddBookView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request): 
         try:
             data = json.loads(request.body)
@@ -48,7 +53,9 @@ class AddBookView(View):
             return JsonResponse({'error': str(e)})
 
 
-class UpdateBookView(View):
+class UpdateBookView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
         try:
             data = json.loads(request.body)
@@ -111,7 +118,9 @@ class UpdateBookView(View):
             return JsonResponse({'error': str(e)})
 
 
-class DeleteBookView(View):
+class DeleteBookView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
         try:
             data = json.loads(request.body)

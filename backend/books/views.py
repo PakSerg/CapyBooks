@@ -1,12 +1,13 @@
 from django.shortcuts import render
-from django.views import View 
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 from .models import Book, Genre
 from django.shortcuts import get_object_or_404
 from .serializers import serialize_book, serialize_genre
 
 
-class CatalogView(View): 
+class CatalogView(APIView):
     def get(self, request): 
         books = Book.objects.select_related('author').prefetch_related('genres').all()
         result = {
@@ -17,7 +18,7 @@ class CatalogView(View):
         return JsonResponse(result)
     
 
-class BookView(View): 
+class BookView(APIView):
     def get(self, request, slug: str): 
         book = get_object_or_404(
             Book.objects.select_related('author').prefetch_related('genres'),
@@ -29,7 +30,7 @@ class BookView(View):
         return JsonResponse(result)
     
 
-class GenresView(View): 
+class GenresView(APIView):
     def get(self, request): 
         genres = Genre.objects.all() 
         result = {

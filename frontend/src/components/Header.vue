@@ -1,7 +1,18 @@
 <script>
 import { RouterLink, RouterView } from 'vue-router'
-
-
+import AuthService from '@/services/AuthService';
+export default {
+  data() {
+    return {
+      isAuthenticated: false,
+      username: ''
+    };
+  },
+  created() {
+    this.isAuthenticated = AuthService.isAuthenticated();
+    this.username = AuthService.getUsername();
+  }
+}
 </script>
 
 <template>
@@ -23,7 +34,8 @@ import { RouterLink, RouterView } from 'vue-router'
                 <RouterLink class="font-special" to="/books">Книги</RouterLink>
                 <RouterLink class="font-special" to="/reading-list">Список чтения</RouterLink>
                 <RouterLink class="font-special" to="/about">Статистика</RouterLink>
-                <RouterLink class="font-special" to="/about">Вход</RouterLink>
+                <RouterLink class="font-special" to="/auth/login">Вход</RouterLink>
+                <p class="font-special">{{ username }}</p>
             </nav>
         </div>
     </div>

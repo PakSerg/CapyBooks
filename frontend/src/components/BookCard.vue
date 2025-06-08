@@ -1,4 +1,6 @@
 <script>
+import axios from 'axios'
+
 export default {
   name: 'BookCard',
   props: {
@@ -8,8 +10,15 @@ export default {
     }
   },
   methods: {
-    handleAddToCart() {
-      console.log('Добавлено в корзину:', this.book.name)
+    async handleAddToCart() {
+      try {
+        await axios.post('http://localhost:8000/reading-list/add-book/', {
+          book_id: this.book.id
+        });
+        console.log('Книга добавлена в список для чтения:', this.book.name);
+      } catch (error) {
+        console.error('Ошибка при добавлении книги в список для чтения:', error);
+      }
     },
   }
 }
