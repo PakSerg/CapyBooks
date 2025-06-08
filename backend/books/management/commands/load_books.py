@@ -9,7 +9,6 @@ class Command(BaseCommand):
     help = 'Загружает тестовые данные книг, авторов и жанров'
 
     def handle(self, *args, **kwargs):
-        # Создаем жанры
         genres = [
             'Фэнтези', 'Научная фантастика', 'Детектив', 'Роман', 'Поэзия',
             'Исторический роман', 'Приключения', 'Ужасы', 'Классика', 'Биография'
@@ -22,18 +21,6 @@ class Command(BaseCommand):
             if created:
                 self.stdout.write(f'Создан жанр: {genre_name}')
 
-        # Создаем авторов
-        # authors = []
-        # for _ in range(20):
-        #     author = Author.objects.create(
-        #         last_name=fake.last_name(),
-        #         first_name=fake.first_name(),
-        #         patronymic=fake.middle_name(),
-        #     )
-        #     authors.append(author)
-        #     self.stdout.write(f'Создан автор: {author}')
-
-        # Список известных книг
         famous_books = [
             {'name': 'Война и мир', 'author': 'Лев Толстой', 'year': 1869},
             {'name': 'Преступление и наказание', 'author': 'Фёдор Достоевский', 'year': 1866},
@@ -57,9 +44,7 @@ class Command(BaseCommand):
             {'name': 'Маленький принц', 'author': 'Антуан де Сент-Экзюпери', 'year': 1943},
         ]
 
-        # Создаем книги
         for book_data in famous_books:
-            # Создаем автора для книги
             author_name = book_data['author'].split()
             author = Author.objects.create(
                 last_name=author_name[-1],
@@ -67,7 +52,6 @@ class Command(BaseCommand):
                 middle_name=author_name[1] if len(author_name) > 2 else None
             )
 
-            # Создаем книгу
             book = Book.objects.create(
                 name=book_data['name'],
                 author=author,
@@ -76,7 +60,6 @@ class Command(BaseCommand):
                 description=fake.text(max_nb_chars=500)
             )
 
-            # Добавляем случайные жанры к книге
             book.genres.add(*random.sample(genre_objects, k=random.randint(1, 3)))
             
             self.stdout.write(f'Создана книга: {book.name}')

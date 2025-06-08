@@ -44,7 +44,9 @@ header .container {
     align-items: center;
     height: 100%;
     gap: 40px;
+    background-color: white;
     padding: 12px 0px;
+    z-index: 1000;
 }
 
 header .left-part {

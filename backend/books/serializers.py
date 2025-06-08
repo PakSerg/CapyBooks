@@ -1,7 +1,7 @@
-from django.db.models import QuerySet
+from .models import Book, Genre
 
 
-def serialize_book(book: QuerySet) -> dict:
+def serialize_book(book: Book) -> dict:
     return {
         'id': book.id,
         'name': book.name,
@@ -13,6 +13,18 @@ def serialize_book(book: QuerySet) -> dict:
         'pages_count': book.pages_count,
         'year': book.year,
         'description': book.description,
-        'genres': [{'id': genre.id, 'name': genre.name} for genre in book.genres.all()],
+        'genres': [
+            {
+                'id': genre.id, 
+                'name': genre.name
+            } for genre in book.genres.all()
+        ],
         'slug': book.slug
+    }
+
+
+def serialize_genre(genre: Genre) -> dict: 
+    return {
+        'id': genre.id, 
+        'name': genre.name
     }

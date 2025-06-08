@@ -25,23 +25,25 @@ export default {
       >
     </a>
     <div class="book-info">
+      <div class="book-upper">
         <div class="book-header">
-            <h3 class="book-title font-special">{{ book.name }}</h3>
-            <p class="book-author font-special">{{ book.author.name }}</p>
+          <h3 class="book-title font-special">{{ book.name }}</h3>
+          <p class="book-author font-special">{{ book.author.name }}</p>
         </div>
 
-      <div class="book-meta">
-        <span class="book-year">{{ book.year }}</span>
-        <span>•</span>
-        <span class="book-pages">{{ book.pages_count }} стр.</span>
-        <span>•</span>
-        <span 
-          v-for="genre in book.genres" 
-          :key="genre.id" 
-          class="genre-tag"
-        >
-          {{ genre.name }}
-        </span>
+        <div class="book-meta">
+          <span class="book-year">{{ book.year }}</span>
+          <span>•</span>
+          <span class="book-pages">{{ book.pages_count }} стр.</span>
+          <span>•</span>
+          <span 
+            v-for="genre in book.genres" 
+            :key="genre.id" 
+            class="genre-tag"
+          >
+            {{ genre.name }}
+          </span>
+        </div>
       </div>
       <div class="book-actions">
         <button @click="handleAddToCart" class="add-book">
@@ -60,6 +62,8 @@ export default {
     border-radius: 8px;
     overflow: hidden;
     transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .book-image {
@@ -82,13 +86,20 @@ export default {
     gap: 12px;
     padding: 16px;
     font-family: var(--font-special), sans-serif;
+    flex: 1;
+    justify-content: space-between;
+}
+.book-upper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 .book-meta {
     display: flex;
     flex-wrap: wrap;
     column-gap: 4px;
     row-gap: 6px;
-    font-size: 14px;
+    font-size: 13px;
 }
 .book-header {
     display: flex;
