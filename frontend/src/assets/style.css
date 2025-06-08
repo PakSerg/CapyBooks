@@ -25,10 +25,19 @@ h1 {
 body {
     color: var(--dark-color)
 }
+body * {
+    font-family: "Raleway", sans-serif;
+}
 
 
 .font-special {
     font-family: "Raleway", sans-serif;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: 40px
 }
 
 

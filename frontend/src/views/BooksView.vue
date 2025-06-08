@@ -109,6 +109,10 @@ export default {
     gap: 20px;
     min-width: 200px;
     width: 240px;
+    position: sticky;
+    top: 140px; 
+    height: fit-content;
+    align-self: flex-start;
 }
 .main-container {
     display: flex;

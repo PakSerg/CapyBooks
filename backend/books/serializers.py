@@ -1,5 +1,6 @@
 from .models import Book, Genre
 
+MEDIA_DOMAIN = 'http://127.0.0.1:8000'
 
 def serialize_book(book: Book) -> dict:
     return {
@@ -9,7 +10,7 @@ def serialize_book(book: Book) -> dict:
             'id': book.author.id,
             'name': str(book.author)
         } if book.author else None,
-        'image': book.image.url if book.image else None,
+        'image': f'{MEDIA_DOMAIN}{book.image.url}' if book.image else None,
         'pages_count': book.pages_count,
         'year': book.year,
         'description': book.description,

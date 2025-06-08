@@ -8,7 +8,6 @@ admin.site.register(Genre)
 @admin.register(Author) 
 class AuthorAdmin(admin.ModelAdmin): 
     list_display = ('last_name', 'first_name', 'patronymic', 'slug')
-    # readonly_fields = ('slug',)
 
 
 @admin.register(Book) 

@@ -13,12 +13,6 @@ export default {
       default: false
     }
   },
-  data() {
-    return {
-      isAdding: false,
-      isRemoving: false
-    }
-  },
   methods: {
     async handleAddToCart() {
       if (this.isInUserList) {
@@ -40,7 +34,6 @@ export default {
       }
     },
     async removeFromList() {
-      this.isRemoving = true;
       try {
         await axios.post('http://localhost:8000/reading-list/delete-book/', {
           book_id: this.book.id
@@ -106,7 +99,7 @@ export default {
 <style scoped>
 .book-card {
     width: 280px;
-    width: calc((100% - 20px * 3) / 4);
+    width: calc((100% - 12px * 4) / 5);
     background: #fff;
     border-radius: 8px;
     overflow: hidden;
