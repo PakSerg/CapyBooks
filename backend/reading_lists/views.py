@@ -3,6 +3,9 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse
 import json
+from django.db.models.functions import TruncMonth
+from collections import Counter
+from django.db.models import Count
 from books.models import Book
 from django.contrib.auth.models import User
 from .models import UserBook, UserBookStatus
@@ -12,6 +15,7 @@ from .serializers import serialize_user_book
 from books.serializers import serialize_book
 from datetime import datetime, timedelta
 from django.utils.timezone import now
+from .models import UserBookStatus
 
 
 class ReadingListView(APIView):
@@ -185,3 +189,29 @@ class DeleteBookView(APIView):
         except Exception as e:
             return JsonResponse({'error': str(e)})
         
+
+class StatisticsView(APIView): 
+    def get(self, request): 
+        user = request.user
+        user_books = UserBook.objects.filter(user=request.user, status=UserBookStatus.get_done()).select_related('book__author').prefetch_related('book__genres')
+
+        print(user_books)
+
+        authors = [ub.book.author for ub in user_books if ub.book.author is not None]
+        top_authors = Counter(authors).most_common(3)
+        top_authors_data = [{'author_id': author.id, 'author_name': str(author), 'books_count': count} for author, count in top_authors]
+
+        genres = []
+        for ub in user_books:
+            genres.extend(list(ub.book.genres.all()))
+        top_genres = Counter(genres).most_common(3)
+        top_genres_data = [{'genre_id': genre.id, 'genre_name': genre.name, 'books_count': count} for genre, count in top_genres]
+
+        result = {
+            'top_authors': top_authors_data,
+            'top_genres': top_genres_data,
+        }
+        print(result)
+
+        return JsonResponse(result)
+

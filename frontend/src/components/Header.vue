@@ -103,7 +103,7 @@ export default {
                 <RouterLink class="font-special" to="/">Главная</RouterLink>
                 <RouterLink class="font-special" to="/books">Книги</RouterLink>
                 <RouterLink v-if="isAuthenticated" class="font-special" to="/reading-list">Список чтения</RouterLink>
-                <RouterLink v-if="isAuthenticated" class="font-special" to="/about">Статистика</RouterLink>
+                <RouterLink v-if="isAuthenticated" class="font-special" to="/statistics">Статистика</RouterLink>
                 <RouterLink v-if="!isAuthenticated" class="font-special" to="/auth/register">Регистрация</RouterLink>
                 <RouterLink v-if="!isAuthenticated" class="font-special" to="/auth/login">Вход</RouterLink>
                 <div v-if="isAuthenticated" class="logout-button" @click="logout">

@@ -14,7 +14,7 @@ main {
     flex-direction: column;
     gap: 40px;
     padding-top: 30px;
-
+    min-height: 90vh;
 }
 
 h1 {
@@ -122,4 +122,8 @@ section {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+footer {
+    margin-top: 40px;
 }
