@@ -7,5 +7,7 @@ app_name = 'books'
 
 urlpatterns = [
     path('', CatalogView.as_view(), name='catalog'), 
-    path('<str:slug>/', BookView.as_view(), name='book'), 
+    path('popular/', PopularBooksView.as_view(), name='popular'),
+    path('genres/', GenresView.as_view()),
+    path('<str:slug>/', BookView.as_view(), name='book'),
 ]

@@ -1,0 +1,129 @@
+body a {
+    color: var(--dark-color)
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+main {
+    margin-top: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-top: 30px;
+    min-height: 90vh;
+}
+
+h1 {
+    font-size: 32px;
+}
+
+body {
+    color: var(--dark-color)
+}
+body * {
+    font-family: "Raleway", sans-serif;
+}
+
+
+.font-special {
+    font-family: "Raleway", sans-serif;
+}
+
+.font-usual {
+    font-family: "Libre Franklin", serif;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: 40px
+}
+
+
+.loader {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #555252;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: 40px auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+.dark-button {
+    background-color: var(--dark-color);
+    padding: 12px 24px;
+    border-radius: 12px;
+    color: white
+}
+.dark-button.passive {
+    background-color: var(--pale-color);
+}
+.light-button {
+    background-color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    color: var(--dark-color);
+    width: fit-content;
+}
+.books-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.fancybox-image {
+    border-radius: 10px;
+}
+
+.swiper-button-next, 
+.swiper-button-prev {
+  height: 80px !important;
+  width: 80px !important;
+  border-radius: 100px !important;
+  overflow: hidden !important;
+
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+.swiper-button-next.swiper-button-disabled, 
+.swiper-button-prev.swiper-button-disabled {
+    opacity: 0 !important;
+}
+.swiper-button-next::after, 
+.swiper-button-prev::after {
+    transition: all 0.3s ease;
+    font-size: 26px !important;
+}
+.swiper-button-next:hover::after, 
+.swiper-button-prev:hover::after {
+    background-color: rgb(218, 218, 218);
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+    background: white;
+    height: 80px;
+    width: 80px;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+footer {
+    margin-top: 40px;
+}

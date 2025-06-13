@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
+from rest_framework.authtoken.models import Token
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -30,13 +31,16 @@ class RegisterView(View):
                 username=username,
                 password=password
             )
+            
+            token = Token.objects.create(user=user)
 
             return JsonResponse({
                 'message': 'Пользователь успешно зарегистрирован',
                 'user': {
                     'id': user.id,
                     'username': user.username,
-                }
+                },
+                'auth_token': token.key
             }, status=201)
 
         except json.JSONDecodeError:
@@ -69,14 +73,15 @@ class LoginView(View):
                     'error': 'Неверные учетные данные'
                 }, status=401)
 
-            login(request, user)
+            token, created = Token.objects.get_or_create(user=user) 
 
             return JsonResponse({
                 'message': 'Успешный вход',
                 'user': {
                     'id': user.id,
                     'username': user.username,
-                }
+                },
+                'auth_token': token.key 
             })
 
         except json.JSONDecodeError:

@@ -17,7 +17,7 @@ class Author(models.Model):
         verbose_name_plural = 'Авторы' 
 
     def __str__(self) -> str: 
-        return f'{self.last_name} {self.first_name} {self.patronymic}'
+        return f'{self.last_name if self.last_name else ""} {self.middle_name if self.middle_name else ""} {self.first_name if self.first_name else ""} {self.patronymic if self.patronymic else ""}'.strip()
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -71,3 +71,15 @@ class Book(models.Model):
 
     def __str__(self) -> str: 
         return f'{self.name}'
+
+
+class BookPhoto(models.Model): 
+    image = models.ImageField(verbose_name='Фото',upload_to='books/additional/') 
+    book = models.ForeignKey(verbose_name='Книга', to=Book, on_delete=models.CASCADE, related_name='photos')
+
+    class Meta: 
+        verbose_name = 'Фото'
+        verbose_name_plural = 'Фото'  
+
+    def __str__(self) -> str: 
+        return f'{self.book.name} {self.pk}'
