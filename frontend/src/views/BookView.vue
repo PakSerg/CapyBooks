@@ -23,6 +23,7 @@ export default {
       isInUserList: null,
       loading: true,
       error: null,
+      userBooks: [],
       mainSwiper: null, 
       thumbsSwiper: null,
       modules: [Thumbs]
@@ -67,6 +68,15 @@ export default {
       } catch (error) {
         console.error('Ошибка при удалении книги:', error);
       }
+    }, 
+    handleBookAdded(bookId) {
+      this.userBooks.push(bookId);
+    },
+    handleBookRemoved(bookId) {
+      const index = this.userBooks.indexOf(bookId);
+      if (index > -1) {
+        this.userBooks.splice(index, 1);
+      }
     }
   },
   async created() {
@@ -76,6 +86,7 @@ export default {
       this.book = response.data.book;
       this.isInUserList = response.data.is_in_user_list;
       this.recommended = response.data.recommended || [];
+      this.userBooks = response.data.user_books || [];
       console.log(this.recommended)
     } catch (error) {
       console.error('Ошибка загрузки:', error);
@@ -140,7 +151,7 @@ export default {
                     <swiper
                         @swiper="setThumbsSwiper"
                         :spaceBetween="10"
-                        :slidesPerView="5"
+                        :slidesPerView="4.5"
                         :freeMode="true"
                         :watchSlidesProgress="true"
                         :modules="modules"
@@ -187,7 +198,9 @@ export default {
                 v-for="book in recommended.slice(0, 6)"
                 :key="book.id"
                 :book="book"
-                
+                :is-in-user-list="userBooks.includes(book.id)"
+                @book-added="handleBookAdded"
+                @book-removed="handleBookRemoved"
                 />
           </div>
         </section>
@@ -263,7 +276,7 @@ h2 {
 }
 
 .mini-slider .swiper-slide{
-    height: 42px;
+    height: 72px;
     object-fit: cover;
 }
 .mini-slider .swiper-slide img {

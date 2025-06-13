@@ -10,18 +10,46 @@ from .exceptions import BookIsAlreadyAddedError
 from datetime import datetime
 from .serializers import serialize_user_book
 from books.serializers import serialize_book
+from datetime import datetime, timedelta
+from django.utils.timezone import now
 
 
 class ReadingListView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request): 
+    def get(self, request):
         user_books = UserBook.objects.select_related('book', 'status').filter(user=request.user)
+
+        now_date = now().date()
+        one_week_ago = now_date - timedelta(days=7)
+        one_month_ago = now_date - timedelta(days=30)
+        one_year_ago = now_date - timedelta(days=365)
+
+        # Категории — важно фильтровать по updated_at, чтобы избежать пересечений
+        last_week_books = []
+        last_month_books = []
+        last_year_books = []
+        all_time_books = []
+
+        for ub in user_books:
+            updated = ub.updated_at.date()
+            if updated >= one_week_ago:
+                last_week_books.append(ub)
+            elif one_week_ago > updated >= one_month_ago:
+                last_month_books.append(ub)
+            elif one_month_ago > updated >= one_year_ago:
+                last_year_books.append(ub)
+            else:
+                all_time_books.append(ub)
+
         result = {
-            'books': [
-                serialize_user_book(user_book) for user_book in user_books
-            ]
+            'all_books': [serialize_user_book(ub) for ub in user_books],
+            'last_week': [serialize_user_book(ub) for ub in last_week_books],
+            'last_month': [serialize_user_book(ub) for ub in last_month_books],
+            'last_year': [serialize_user_book(ub) for ub in last_year_books],
+            'older': [serialize_user_book(ub) for ub in all_time_books],
         }
+
         return JsonResponse(result)
     
 
@@ -84,6 +112,8 @@ class UpdateBookView(APIView):
                 user=request.user,
                 book_id=book_id
             )
+
+            print(data)
 
             if 'status_id' in data:
                 try:
@@ -155,4 +185,3 @@ class DeleteBookView(APIView):
         except Exception as e:
             return JsonResponse({'error': str(e)})
         
-

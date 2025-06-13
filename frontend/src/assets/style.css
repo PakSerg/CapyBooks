@@ -80,3 +80,6 @@ section {
     flex-wrap: wrap;
     gap: 12px;
 }
+.fancybox-image {
+    border-radius: 10px;
+}
