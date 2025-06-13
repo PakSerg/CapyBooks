@@ -20,7 +20,6 @@ export default {
         return;
       }
       
-      this.isAdding = true;
       try {
         await axios.post('http://localhost:8000/reading-list/add-book/', {
           book_id: this.book.id
@@ -30,7 +29,6 @@ export default {
       } catch (error) {
         console.error('Ошибка при добавлении книги в список для чтения:', error);
       } finally {
-        this.isAdding = false;
       }
     },
     async removeFromList() {
@@ -43,7 +41,6 @@ export default {
       } catch (error) {
         console.error('Ошибка при удалении книги из списка для чтения:', error);
       } finally {
-        this.isRemoving = false;
       }
     }
   }
@@ -52,13 +49,13 @@ export default {
 
 <template>
   <div class="book-card">
-    <a class="book-image">
+    <router-link :to="'/books/' + book.slug" class="book-image">
       <img 
         :src="book.image || '/book-default.png'" 
         :alt="book.name"
         class="book-cover"
       >
-    </a>
+    </router-link>
     <div class="book-info">
       <div class="book-upper">
         <div class="book-header">
@@ -87,7 +84,6 @@ export default {
           :class="{ 
             'in-list': isInUserList, 
           }"
-          :disabled="isAdding || isRemoving"
         >
         {{ isInUserList ? 'В списке' : 'Добавить' }}
         </button>
@@ -158,7 +154,7 @@ export default {
 .add-book {
     background-color: var(--dark-color);
     border-radius: 12px;
-    padding: 10px 28px;
+    padding: 14px 28px;
     font-size: 14px;
     color: white;
     transition: all 0.3s ease;

@@ -57,6 +57,8 @@ export default {
 </script>
 
 <template>
+  
+
   <main>
     <section class="container catalog">
       <h1 class="font-special">Каталог</h1>

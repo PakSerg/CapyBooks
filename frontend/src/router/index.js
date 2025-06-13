@@ -4,6 +4,7 @@ import BooksView from '@/views/BooksView.vue'
 import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import ReadingListView from '@/views/ReadingListView.vue'
+import BookView from '@/views/BookView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,7 +23,12 @@ const router = createRouter({
       path: '/books', 
       name: 'books', 
       component: BooksView,
-    }, 
+    },
+    {
+      path: '/books/:slug',
+      name: 'book',
+      component: BookView,
+    },
     {
       path: '/reading-list', 
       name: 'reading-list', 
@@ -40,5 +46,7 @@ const router = createRouter({
     },
   ],
 })
+
+
 
 export default router

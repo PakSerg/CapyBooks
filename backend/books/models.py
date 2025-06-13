@@ -71,3 +71,15 @@ class Book(models.Model):
 
     def __str__(self) -> str: 
         return f'{self.name}'
+
+
+class BookPhoto(models.Model): 
+    image = models.ImageField(verbose_name='Фото',upload_to='books/additional/') 
+    book = models.ForeignKey(verbose_name='Книга', to=Book, on_delete=models.CASCADE, related_name='photos')
+
+    class Meta: 
+        verbose_name = 'Фото'
+        verbose_name_plural = 'Фото'  
+
+    def __str__(self) -> str: 
+        return f'{self.book.name} {self.pk}'

@@ -89,7 +89,7 @@ export default {
 <template>
   <main>
     <section class="container">
-      <h1 class="font-special">Список чтения</h1>
+      <h1 class="font-special">Ваш список чтения</h1>
       <div class="reading-list-container">
         <div v-if="loading" class="loader"></div>
         <div v-else-if="error" class="error">

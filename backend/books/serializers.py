@@ -11,6 +11,7 @@ def serialize_book(book: Book) -> dict:
             'name': str(book.author)
         } if book.author else None,
         'image': f'{MEDIA_DOMAIN}{book.image.url}' if book.image else None,
+        'photos': [f'{MEDIA_DOMAIN}{photo.image.url}' for photo in book.photos.all()],
         'pages_count': book.pages_count,
         'year': book.year,
         'description': book.description,
