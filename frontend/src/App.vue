@@ -16,6 +16,14 @@ export default {
       <component :is="Component" />
     </transition>
   </RouterView>
+
+  <footer>
+    <div class="footer-left">
+      <img class="footer-logo" src="/logo.png" alt="">
+      <p>CapyBooks</p>
+    </div>
+    <span>Все права защищены</span>
+  </footer>
 </template>
 
 <style>
@@ -36,5 +44,23 @@ export default {
 .page-enter-from,
 .page-leave-to {
   opacity: 0;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  height: 100px;
+}
+.footer-logo {
+  border-radius: 100px;
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+.footer-left {
+  display: flex;
+  gap: 12px;
+  height: 20px;
+  align-items: center;
 }
 </style>

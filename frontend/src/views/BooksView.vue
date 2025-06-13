@@ -127,7 +127,7 @@ export default {
           <div class="pagination" v-if="totalPages > 1">
             <button class="dark-button" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">Назад</button>
             <span>Страница {{ currentPage }} из {{ totalPages }}</span>
-            <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">Вперёд</button>
+            <button class="dark-button" @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">Вперёд</button>
           </div>
         </div>
       </div>
