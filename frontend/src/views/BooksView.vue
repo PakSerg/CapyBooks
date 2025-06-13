@@ -13,39 +13,69 @@ export default {
       userBooks: [],
       genres: [],
       loading: false,
-      error: null
+      error: null,
+      selectedGenre: null,
+      currentPage: 1,
+      totalPages: 1,
+      pageSize: 15, 
     }
   },
   methods: {
     async fetchBooks() {
-      this.loading = true
+      this.loading = true;
+      this.error = null;
+
       try {
-        const response = await axios.get('http://localhost:8000/books')
+        const params = {
+          page: this.currentPage,
+          page_size: this.pageSize
+        };
+
+        if (this.selectedGenre) {
+          params.category = this.selectedGenre;
+        }
+
+        const response = await axios.get('http://localhost:8000/books', { params });
+
         this.books = response.data.books;
         this.userBooks = response.data.user_books || [];
-        console.log(response.data)
+        this.totalPages = response.data.pagination.total_pages;
+
       } catch (error) {
-        this.error = 'Ошибка при загрузке книг'
-        console.error('Ошибка при загрузке книг:', error)
+        this.error = 'Ошибка при загрузке книг';
+        console.error('Ошибка при загрузке книг:', error);
       } finally {
-        this.loading = false
+        this.loading = false;
       }
     }, 
     async fetchGenres() {
       try {
-        const response = await axios.get('http://localhost:8000/books/genres')
+        const response = await axios.get('http://localhost:8000/books/genres');
         this.genres = response.data.genres;
       } catch (error) {
-        console.error('Ошибка при загрузке жанров')
+        console.error('Ошибка при загрузке жанров');
       }
     },
     handleBookAdded(bookId) {
-      this.userBooks.push(bookId);
+      if (!this.userBooks.includes(bookId)) {
+        this.userBooks.push(bookId);
+      }
     },
     handleBookRemoved(bookId) {
       const index = this.userBooks.indexOf(bookId);
       if (index > -1) {
         this.userBooks.splice(index, 1);
+      }
+    },
+    selectGenre(genreId) {
+      this.selectedGenre = genreId;
+      this.currentPage = 1;
+      this.fetchBooks();
+    },
+    goToPage(page) {
+      if (page > 0 && page <= this.totalPages) {
+        this.currentPage = page;
+        this.fetchBooks();
       }
     }
   },
@@ -57,27 +87,32 @@ export default {
 </script>
 
 <template>
-  
-
   <main>
     <section class="container catalog">
       <h1 class="font-special">Каталог</h1>
       <div class="catalog-content">
         <div class="sidebar">
-          <p 
-            class="font-special"
-            v-for="genre in genres" 
+          <p
+            class="font-special category-filter"
+            v-for="genre in genres"
             :key="genre.id"
+            :class="{ active: selectedGenre === genre.id }"
+            @click="selectGenre(genre.id)"
           >
             {{ genre.name }}
           </p>
+          <p class="font-special category-filter dark-button" @click="selectGenre(null)">
+            Сбросить фильтры
+          </p>
         </div>
+
         <div class="main-container">
           <div v-if="error" class="error">
             {{ error }}
           </div>
-          <div v-if="loading" class="loader">
-          </div>
+
+          <div v-if="loading" class="loader"></div>
+
           <div v-else class="books-cards">
             <BookCard
               v-for="book in books"
@@ -87,6 +122,12 @@ export default {
               @book-added="handleBookAdded"
               @book-removed="handleBookRemoved"
             />
+          </div>
+
+          <div class="pagination" v-if="totalPages > 1">
+            <button class="dark-button" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">Назад</button>
+            <span>Страница {{ currentPage }} из {{ totalPages }}</span>
+            <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">Вперёд</button>
           </div>
         </div>
       </div>
@@ -134,5 +175,23 @@ export default {
 }
 .error {
     color: #ff4444;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.category-filter {
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+.category-filter.active {
+  text-decoration: underline;
+}
+.category-filter.dark-button {
+  width: fit-content;
+  margin-top: 20px;
 }
 </style>
