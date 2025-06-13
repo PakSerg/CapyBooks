@@ -1,8 +1,15 @@
 <script>
 import axios from 'axios'
+import AuthService from '@/services/AuthService';
 
 export default {
   name: 'BookCard',
+  data() {
+    return {
+      isAuthenticated: false,
+      username: ''
+    };
+  },
   props: {
     book: {
       type: Object,
@@ -43,6 +50,10 @@ export default {
       } finally {
       }
     }
+  }, 
+  created() {
+    this.isAuthenticated = AuthService.isAuthenticated();
+    this.username = AuthService.getUsername();
   }
 }
 </script>
@@ -77,7 +88,7 @@ export default {
           </span>
         </div>
       </div>
-      <div class="book-actions">
+      <div class="book-actions" v-if="isAuthenticated">
         <button 
           @click="handleAddToCart" 
           class="add-book"

@@ -1,224 +1,172 @@
-<script setup>
-import { ref, onMounted } from 'vue'
+<script>
 import axios from 'axios'
 import BookCard from '@/components/BookCard.vue'
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import { Navigation, Pagination } from 'swiper/modules'
 
-const popularBooks = ref([])
-const loading = ref(true)
-
-onMounted(async () => {
-  try {
-    const response = await axios.get('http://localhost:8000/books/popular/')
-    popularBooks.value = response.data
-  } catch (error) {
-    console.error('Ошибка при загрузке популярных книг:', error)
-  } finally {
-    loading.value = false
+export default {
+  components: {
+    BookCard,
+    Swiper,
+    SwiperSlide
+  },
+  data() {
+    return {
+      popularBooks: [],
+      loading: true,
+      swiperModules: [Navigation, Pagination]
+    }
+  },
+  mounted() {
+    this.fetchPopularBooks()
+  },
+  methods: {
+    async fetchPopularBooks() {
+      try {
+        const response = await axios.get('http://localhost:8000/books/popular/')
+        this.popularBooks = response.data.popular_books
+        console.log(this.popularBooks)
+      } catch (error) {
+        console.error('Ошибка при загрузке популярных книг:', error)
+      } finally {
+        this.loading = false
+      }
+    }
   }
-})
+}
 </script>
 
 <template>
   <main>
-    <!-- Hero секция -->
-    <section class="hero">
-      <div class="container">
-        <div class="hero-content">
-          <h1 class="font-special">Откройте для себя мир книг</h1>
-          <p class="hero-subtitle">Создавайте свой список для чтения, делитесь впечатлениями и находите новые книги</p>
-          <router-link to="/books" class="cta-button">Начать читать</router-link>
-        </div>
+
+    <section class="welcome-section">
+      <div class="welcome-header">
+        <h1>Добро пожаловать в <span class="company-name">CapyBooks</span></h1>
+        <small>Ваш персональный список для чтения — удобно, просто, эффективно</small>
+      </div>
+      <RouterLink class="dark-button" to="/books">Перейти к каталогу</RouterLink>
+    </section>
+
+    <section class="about-section">
+      <img class="about-bg-img" src="/logo.png" alt="">
+
+      <div class="about-content">
+          <h2>О приложении</h2>
+          <div>
+            Это современное веб-приложение для всех, кто любит читать и хочет структурировать свой книжный путь. С BookTrack вы сможете не только вести список прочитанных и запланированных книг, но и отслеживать прогресс, оставлять отзывы, формировать цели на месяц или год, а также анализировать свои привычки с помощью наглядной статистики.
+          </div>
+          <div class="about-buttons">
+            <RouterLink class="light-button" to="/auth/login/">Начать сейчас!</RouterLink>
+            <RouterLink class="light-button" to="/books">Есть вопросы?</RouterLink>
+          </div>
       </div>
     </section>
 
-    <!-- Популярные книги -->
-    <section class="popular-books">
-      <div class="container">
-        <h2 class="section-title font-special">Популярные книги</h2>
-        <div class="books-grid" v-if="!loading">
-          <BookCard
-            v-for="book in popularBooks"
-            :key="book.id"
-            :book="book"
-          />
-        </div>
-        <div v-else class="loading">
-          Загрузка книг...
-        </div>
+    <section class="popular-section">
+      <h2>Популярные книги</h2>
+      <div class="popular-books">
+        <Swiper
+          :modules="swiperModules"
+          :slides-per-view="5.5"
+          :space-between="20"
+          :navigation="true"
+          :pagination="{ clickable: true }"
+        >
+          <SwiperSlide v-for="book in popularBooks" :key="book.id">
+            <BookCard :book="book" />
+          </SwiperSlide>
+        </Swiper>
       </div>
-    </section>
+  </section>
 
-    <!-- Преимущества -->
-    <section class="features">
-      <div class="container">
-        <h2 class="section-title font-special">Почему выбирают нас</h2>
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">📚</div>
-            <h3>Большая библиотека</h3>
-            <p>Тысячи книг различных жанров</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">📝</div>
-            <h3>Личные списки</h3>
-            <p>Создавайте и управляйте своими списками для чтения</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">💬</div>
-            <h3>Обсуждения</h3>
-            <p>Делитесь мнением и общайтесь с другими читателями</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Отзывы -->
-    <section class="testimonials">
-      <div class="container">
-        <h2 class="section-title font-special">Отзывы читателей</h2>
-        <div class="testimonials-grid">
-          <div class="testimonial-card">
-            <p class="testimonial-text">"Отличный сервис! Нашел много интересных книг и познакомился с единомышленниками."</p>
-            <div class="testimonial-author">Анна К.</div>
-          </div>
-          <div class="testimonial-card">
-            <p class="testimonial-text">"Удобно вести список прочитанных книг и планировать новые."</p>
-            <div class="testimonial-author">Михаил П.</div>
-          </div>
-          <div class="testimonial-card">
-            <p class="testimonial-text">"Люблю общаться с другими читателями и узнавать о новых книгах."</p>
-            <div class="testimonial-author">Елена С.</div>
-          </div>
-        </div>
-      </div>
-    </section>
   </main>
 </template>
 
 <style scoped>
-.hero {
-  background: linear-gradient(135deg, var(--dark-color) 0%, var(--pale-color) 100%);
+
+.welcome-section {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
+main {
+  gap: 80px
+}
+h1 {
+  font-size: 5.5vh;
+}
+.welcome-header {
+  width: 28vw;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.welcome-header small {
+  font-size: 20px;
+  font-size: 2vh;
+}
+.company-name {
+  font-size: 60px;
+  font-size: 8vh;
+}
+.about-section {
+  background-color: #122930;
+  border-radius: 12px;
+  min-height: 200px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  padding: 60px 80px;
+}
+.about-bg-img {
+  position: absolute;
+  right: 0;
+  top: 0;
+  max-height: 100%;
+  max-width: 40%;
+  width: 100%;
+  object-fit: contain;
+}
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   color: white;
-  padding: 120px 0;
-  text-align: center;
+  max-width: 60%;
+  line-height: 1.8rem;
 }
-
-.hero-content {
-  max-width: 800px;
-  margin: 0 auto;
+.about-content h2 {
+  font-size: 36px;
 }
-
-.hero h1 {
-  font-size: 48px;
-  margin-bottom: 24px;
+.about-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }
-
-.hero-subtitle {
-  font-size: 20px;
-  margin-bottom: 32px;
-  opacity: 0.9;
+.book-card {
+  width: 100%;
 }
-
-.cta-button {
-  display: inline-block;
-  background: white;
-  color: var(--dark-color);
-  padding: 16px 32px;
-  border-radius: 12px;
-  font-size: 18px;
-  font-weight: 600;
-  transition: transform 0.3s ease;
-}
-
-.cta-button:hover {
-  transform: translateY(-2px);
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.section-title {
+.popular-section h2 {
   font-size: 32px;
-  text-align: center;
-  margin-bottom: 48px;
 }
-
-.popular-books {
-  padding: 80px 0;
-  background: #f8f9fa;
+.swiper-pagination-bullet .swiper-pagination-bullet-active {
+  background: var(--dark-color) !important;
 }
-
-.books-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-}
-
-.features {
-  padding: 80px 0;
-}
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 32px;
-}
-
-.feature-card {
-  text-align: center;
-  padding: 32px;
+.swiper-button-next:after {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.feature-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-}
-
-.feature-card h3 {
-  font-size: 20px;
-  margin-bottom: 12px;
-}
-
-.testimonials {
-  padding: 80px 0;
-  background: #f8f9fa;
-}
-
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 32px;
-}
-
-.testimonial-card {
-  background: white;
-  padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.testimonial-text {
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 16px;
-}
-
-.testimonial-author {
-  font-weight: 600;
-  color: var(--pale-color);
-}
-
-.loading {
-  text-align: center;
-  padding: 40px;
-  font-size: 18px;
-  color: var(--pale-color);
+  height: 80px;
+  width: 80px;
+  content: 'next';
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (max-width: 768px) {

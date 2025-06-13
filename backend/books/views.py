@@ -25,16 +25,30 @@ class CatalogView(APIView):
         return JsonResponse(result)
     
 
+class PopularBooksView(APIView): 
+    def get(self, request): 
+        popular_books = Book.objects.order_by('?')[:8]
+        result = {
+            'popular_books': [
+                serialize_book(book) for book in popular_books
+            ]
+        }
+        return JsonResponse(result)
+
+    
+
 class BookView(APIView):
     def get(self, request, slug: str): 
         book = get_object_or_404(
             Book.objects.select_related('author').prefetch_related('genres'),
             slug=slug
         )
-        is_in_user_list = UserBook.objects.filter(
-            user=request.user, 
-            book=book
-        ).first()
+        is_in_user_list = False
+        if request.user.is_authenticated:
+            is_in_user_list = UserBook.objects.filter(
+                user=request.user, 
+                book=book
+            ).first()
 
         user_books = []
         if request.user.is_authenticated:

@@ -21,7 +21,6 @@ h1 {
     font-size: 32px;
 }
 
-
 body {
     color: var(--dark-color)
 }
@@ -75,6 +74,13 @@ section {
 .dark-button.passive {
     background-color: var(--pale-color);
 }
+.light-button {
+    background-color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    color: var(--dark-color);
+    width: fit-content;
+}
 .books-cards {
     display: flex;
     flex-wrap: wrap;
@@ -82,4 +88,38 @@ section {
 }
 .fancybox-image {
     border-radius: 10px;
+}
+
+.swiper-button-next, 
+.swiper-button-prev {
+  height: 80px !important;
+  width: 80px !important;
+  border-radius: 100px !important;
+  overflow: hidden !important;
+
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+.swiper-button-next.swiper-button-disabled, 
+.swiper-button-prev.swiper-button-disabled {
+    opacity: 0 !important;
+}
+.swiper-button-next::after, 
+.swiper-button-prev::after {
+    transition: all 0.3s ease;
+    font-size: 26px !important;
+}
+.swiper-button-next:hover::after, 
+.swiper-button-prev:hover::after {
+    background-color: rgb(218, 218, 218);
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+    background: white;
+    height: 80px;
+    width: 80px;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

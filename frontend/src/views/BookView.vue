@@ -286,7 +286,7 @@ h2 {
 .main-slider .swiper-slide,
 .mini-slider .swiper-slide {
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: border 0.3s ease;
 }
 .mini-slider .swiper-slide {
     border: 1px solid rgb(0, 30, 34, 0.1);

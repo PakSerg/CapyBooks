@@ -1,30 +1,86 @@
 <script>
-import { RouterLink, RouterView } from 'vue-router'
-import AuthService from '@/services/AuthService';
+import { RouterLink } from 'vue-router'
+import AuthService from '@/services/AuthService'
+
 export default {
   data() {
     return {
       isAuthenticated: false,
-      username: ''
-    };
+      username: '',
+      scrollIntervalId: null,
+      lastScrollTop: 0,
+      didScroll: false,
+      SCROLL_DELTA: 5,
+      SCROLL_CHECK_INTERVAL: 150
+    }
   },
   methods: {
     async logout() {
-        await AuthService.logout();
-        this.updateAuthState();
-        console.log('Вышел')
+      await AuthService.logout()
+      this.updateAuthState()
+      console.log('Вышел')
     },
     updateAuthState() {
-      this.isAuthenticated = AuthService.isAuthenticated();
-      this.username = AuthService.getUsername();
+      this.isAuthenticated = AuthService.isAuthenticated()
+      this.username = AuthService.getUsername()
+    },
+    handleScroll() {
+      const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop
+      const header = document.querySelector('header')
+      const filtersSectionVisible = document.querySelector('.filtersSection.visible')
+      const navbarNav = document.getElementById('navbarNav')
+      const mobileMenu = document.querySelector('.mobile-menu')
+      const dropdown = document.querySelector('.header-dropdown-choices')
+      const burger = document.querySelector('.burger-container img')
+      const navbarHeight = header?.offsetHeight || 96
+
+      if (filtersSectionVisible) {
+        header.classList.remove('nav-up')
+        header.classList.add('nav-down')
+        return
+      }
+
+      if (Math.abs(this.lastScrollTop - currentScrollTop) <= this.SCROLL_DELTA) {
+        return
+      }
+
+      if (this.lastScrollTop < currentScrollTop && currentScrollTop > navbarHeight) {
+        header.classList.remove('nav-down')
+        header.classList.add('nav-up')
+
+        dropdown?.classList.remove('visible')
+        if (mobileMenu?.classList.contains('active')) {
+          mobileMenu.classList.remove('active')
+          if (burger) burger.src = '/static/images/burger.svg'
+        }
+
+        navbarNav?.classList.remove('show')
+      } else if (currentScrollTop + window.innerHeight < document.body.scrollHeight) {
+        header.classList.remove('nav-up')
+        header.classList.add('nav-down')
+      }
+
+      this.lastScrollTop = currentScrollTop
     }
   },
-  created() {
-    this.updateAuthState();
-    window.addEventListener('auth-state-changed', this.updateAuthState);
+  mounted() {
+    this.updateAuthState()
+    window.addEventListener('auth-state-changed', this.updateAuthState)
+
+    window.addEventListener('scroll', () => {
+      this.didScroll = true
+    })
+
+    this.scrollIntervalId = setInterval(() => {
+      if (this.didScroll) {
+        this.handleScroll()
+        this.didScroll = false
+      }
+    }, this.SCROLL_CHECK_INTERVAL)
   },
   beforeUnmount() {
-    window.removeEventListener('auth-state-changed', this.updateAuthState);
+    window.removeEventListener('auth-state-changed', this.updateAuthState)
+    clearInterval(this.scrollIntervalId)
   }
 }
 </script>
@@ -46,8 +102,9 @@ export default {
             <nav>
                 <RouterLink class="font-special" to="/">Главная</RouterLink>
                 <RouterLink class="font-special" to="/books">Книги</RouterLink>
-                <RouterLink class="font-special" to="/reading-list">Список чтения</RouterLink>
+                <RouterLink v-if="isAuthenticated" class="font-special" to="/reading-list">Список чтения</RouterLink>
                 <RouterLink v-if="isAuthenticated" class="font-special" to="/about">Статистика</RouterLink>
+                <RouterLink v-if="!isAuthenticated" class="font-special" to="/auth/register">Регистрация</RouterLink>
                 <RouterLink v-if="!isAuthenticated" class="font-special" to="/auth/login">Вход</RouterLink>
                 <div v-if="isAuthenticated" class="logout-button" @click="logout">
                     <img src="/logout-icon.svg" alt="">
@@ -65,6 +122,10 @@ header {
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 1000; 
+    background-color: white;
+
+    transition: transform 0.3s ease;
 }
 header .container {
     display: flex;
@@ -74,7 +135,13 @@ header .container {
     gap: 40px;
     background-color: white;
     padding: 12px 0px;
-    z-index: 1000;
+}
+
+header.nav-up {
+    transform: translateY(-100%);
+}
+header.nav-down {
+    transform: translateY(0);
 }
 
 header .left-part {
