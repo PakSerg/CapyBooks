@@ -35,7 +35,9 @@ export default {
           params.category = this.selectedGenre;
         }
 
-        const response = await axios.get('http://localhost:8000/books', { params });
+        const response = await axios.get('/api/books', { params });
+
+        console.log(response.data)
 
         this.books = response.data.books;
         this.userBooks = response.data.user_books || [];
@@ -43,14 +45,14 @@ export default {
 
       } catch (error) {
         this.error = 'Ошибка при загрузке книг';
-        console.error('Ошибка при загрузке книг:', error);
+        console.error('Ошибка при загрузке книг:', response.data);
       } finally {
         this.loading = false;
       }
     }, 
     async fetchGenres() {
       try {
-        const response = await axios.get('http://localhost:8000/books/genres');
+        const response = await axios.get('/api/books/genres');
         this.genres = response.data.genres;
       } catch (error) {
         console.error('Ошибка при загрузке жанров');
