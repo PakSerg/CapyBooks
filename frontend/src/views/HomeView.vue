@@ -60,7 +60,7 @@ export default {
           </div>
           <div class="about-buttons">
             <RouterLink class="light-button" to="/auth/login/">Начать сейчас!</RouterLink>
-            <RouterLink class="light-button" to="/books">Есть вопросы?</RouterLink>
+            <RouterLink class="light-button" to="/books">В каталог</RouterLink>
           </div>
       </div>
     </section>
@@ -72,6 +72,7 @@ export default {
           :modules="swiperModules"
           :slides-per-view="5.5"
           :space-between="20"
+          :slides-per-group="5"
           :navigation="true"
           :pagination="{ clickable: true }"
         >

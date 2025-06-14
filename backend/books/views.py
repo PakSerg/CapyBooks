@@ -84,7 +84,7 @@ class BookView(APIView):
             .filter(genres__in=genre_ids)
             .annotate(same_genres=Count('genres', filter=Q(genres__in=genre_ids)))
             .order_by('-same_genres')
-            .prefetch_related('genres', 'author')[:6]
+            .prefetch_related('genres', 'author')[:20]
         )
 
         result = {

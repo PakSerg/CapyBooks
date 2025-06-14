@@ -5,8 +5,13 @@ import 'swiper/css';
 import 'swiper/css/thumbs';
 import { Thumbs } from 'swiper/modules';
 import { Fancybox } from "@fancyapps/ui";
+import 'swiper/css/navigation'
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 import BookCard from '@/components/BookCard.vue';
+import AuthService from '@/services/AuthService'; 
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import { Navigation, Pagination } from 'swiper/modules'
 
 
 export default {
@@ -26,7 +31,10 @@ export default {
       userBooks: [],
       mainSwiper: null, 
       thumbsSwiper: null,
-      modules: [Thumbs]
+      modules: [Thumbs], 
+      isAuthenticated: false,
+      username: '', 
+      recommendedModules: [Navigation, Pagination]
     };
   },
   methods: {
@@ -93,6 +101,11 @@ export default {
       this.error = 'Ошибка при загрузке книги';
     } finally {
       this.loading = false;
+
+
+
+      this.isAuthenticated = AuthService.isAuthenticated();
+      this.username = AuthService.getUsername();    
     }
   }, 
   mounted() {
@@ -114,8 +127,7 @@ export default {
 
 <template>
     <main>
-        <div v-if="loading" class="loading">
-            Загрузка...
+        <div v-if="loading" class="loader">
         </div>
         <div v-else-if="error" class="error">
             {{ error }}
@@ -176,7 +188,7 @@ export default {
                         <span v-for="(genre, index) in book?.genres" :key="genre.id" class="genre-tag">
                             {{ genre.name }}{{ index < book.genres.length - 1 ? ',' : '' }} </span>
                     </div>
-                    <div class="buttons-row">
+                    <div class="buttons-row" v-if="isAuthenticated">
                         <button 
                             class="dark-button"
                             @click="handleAddToCart" 
@@ -191,19 +203,27 @@ export default {
             </div>
         </div>
         <section class="recommended-section" v-if="recommended.length > 0">
-            <h2 class="font-usual">Похожие книги</h2>
-            
-            <div class="books-cards">
+    <h2 class="font-usual">Похожие книги</h2>
+    
+    <div class="recommended-books">
+        <Swiper
+            :modules="recommendedModules"
+            :slides-per-view="5.5"
+            :space-between="20"
+            :slides-per-group="5"
+            :navigation="true"
+        >
+            <SwiperSlide v-for="book in recommended" :key="book.id">
                 <BookCard
-                v-for="book in recommended.slice(0, 6)"
-                :key="book.id"
-                :book="book"
-                :is-in-user-list="userBooks.includes(book.id)"
-                @book-added="handleBookAdded"
-                @book-removed="handleBookRemoved"
+                    :book="book"
+                    :is-in-user-list="userBooks.includes(book.id)"
+                    @book-added="handleBookAdded"
+                    @book-removed="handleBookRemoved"
                 />
-          </div>
-        </section>
+            </SwiperSlide>
+        </Swiper>
+    </div>
+</section>
 
     </main>
 </template>
@@ -310,5 +330,26 @@ h2 {
 }
 .recommended-section {
     gap: 20px;
+}
+
+
+.popular-section h2 {
+  font-size: 32px;
+}
+.book-card {
+  width: 100%;
+}
+.swiper-pagination-bullet .swiper-pagination-bullet-active {
+  background: var(--dark-color) !important;
+}
+.swiper-button-next:after {
+  background: white;
+  height: 80px;
+  width: 80px;
+  content: 'next';
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

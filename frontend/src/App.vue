@@ -11,8 +11,8 @@ export default {
 
 <template>
   <Header />
-  <RouterView v-slot="{ Component }">
-    <transition name="page" mode="out-in">
+  <RouterView v-slot="{ Component, route }" >
+    <transition name="page" mode="out-in" :key="route.path">
       <component :is="Component" />
     </transition>
   </RouterView>
