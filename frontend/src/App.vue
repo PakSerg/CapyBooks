@@ -12,7 +12,7 @@ export default {
 <template>
   <Header />
   <RouterView v-slot="{ Component, route }" >
-    <transition name="page" mode="out-in" :key="route.path">
+    <transition name="page" mode="out-in">
       <component :is="Component" />
     </transition>
   </RouterView>
