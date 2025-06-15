@@ -56,7 +56,7 @@ export default {
 
       this.isInUserList = true;
       try {
-        await axios.post('http://localhost:8000/reading-list/add-book/', {
+        await axios.post('http://5.129.207.86/api/reading-list/add-book/', {
           book_id: this.book.id
         });
         console.log('Книга добавлена в список для чтения:', this.book.name);
@@ -67,7 +67,7 @@ export default {
     },
     async removeFromList() {
       try {
-        await axios.post('http://localhost:8000/reading-list/delete-book/', {
+        await axios.post('http://5.129.207.86/api/reading-list/delete-book/', {
           book_id: this.book.id
         });
         console.log('Книга удалена из списка для чтения:', this.book.name);
@@ -90,7 +90,7 @@ export default {
   async created() {
     try {
       console.log('Загрузка книги со слагом:', this.$route.params.slug);
-      const response = await axios.get(`http://localhost:8000/books/${this.$route.params.slug}/`);
+      const response = await axios.get(`http://5.129.207.86/api/books/${this.$route.params.slug}/`);
       this.book = response.data.book;
       this.isInUserList = response.data.is_in_user_list;
       this.recommended = response.data.recommended || [];
