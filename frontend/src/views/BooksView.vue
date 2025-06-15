@@ -35,7 +35,7 @@ export default {
           params.category = this.selectedGenre;
         }
 
-        const response = await axios.get('http://localhost:8000/books/', { params });
+        const response = await axios.get('http://5.129.207.86/api/books/', { params });
 
         console.log(response.data)
 
