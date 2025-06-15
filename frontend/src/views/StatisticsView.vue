@@ -18,7 +18,7 @@ export default {
       this.error = null;
 
       try {
-        const response = await axios.get('http://5.129.207.86/api/reading-list/statistics');
+        const response = await axios.get('http://5.129.207.86/api/reading-list/statistics/');
         this.topAuthors = response.data.top_authors || [];
         this.topGenres = response.data.top_genres || [];
         this.topMonth = response.data.top_month || null;
