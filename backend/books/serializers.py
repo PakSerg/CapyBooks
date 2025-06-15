@@ -1,6 +1,6 @@
 from .models import Book, Genre
 
-MEDIA_DOMAIN = 'http://127.0.0.1:8000'
+MEDIA_DOMAIN = 'http://5.129.207.86/api'
 
 def serialize_book(book: Book) -> dict:
     return {
