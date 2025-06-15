@@ -19,7 +19,7 @@ from .models import UserBookStatus
 
 
 class ReadingListView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get(self, request):
         user_books = UserBook.objects.select_related('book', 'status').filter(user=request.user)
@@ -73,7 +73,7 @@ class StatusesView(APIView):
 
 
 class AddBookView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request): 
         try:
@@ -102,7 +102,7 @@ class AddBookView(APIView):
 
 
 class UpdateBookView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request):
         try:
@@ -169,7 +169,7 @@ class UpdateBookView(APIView):
 
 
 class DeleteBookView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request):
         try:
