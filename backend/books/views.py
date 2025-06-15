@@ -17,6 +17,8 @@ class CatalogView(APIView):
         page = int(request.GET.get('page', 1))
         page_size = int(request.GET.get('page_size', 15))  
 
+        print(request.user)
+
         books_qs = Book.objects.select_related('author').prefetch_related('genres').all()
 
         if category_id:

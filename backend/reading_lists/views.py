@@ -24,12 +24,15 @@ class ReadingListView(APIView):
     def get(self, request):
         user_books = UserBook.objects.select_related('book', 'status').filter(user=request.user)
 
+        print(request.user)
+
+        print(user_books)
+
         now_date = now().date()
         one_week_ago = now_date - timedelta(days=7)
         one_month_ago = now_date - timedelta(days=30)
         one_year_ago = now_date - timedelta(days=365)
 
-        # Категории — важно фильтровать по updated_at, чтобы избежать пересечений
         last_week_books = []
         last_month_books = []
         last_year_books = []
@@ -53,6 +56,8 @@ class ReadingListView(APIView):
             'last_year': [serialize_user_book(ub) for ub in last_year_books],
             'older': [serialize_user_book(ub) for ub in all_time_books],
         }
+
+        print(result)
 
         return JsonResponse(result)
     
