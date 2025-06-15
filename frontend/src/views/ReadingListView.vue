@@ -20,7 +20,7 @@ export default {
 		async fetchUserBooks() {
 			this.loading = true
 			try {
-				const response = await axios.get('http://5.129.207.86/api/reading-list');
+				const response = await axios.get('http://5.129.207.86/api/reading-list/');
 				this.userBooks = response.data.all_books;
 				console.log(response.data);
 
@@ -45,7 +45,7 @@ export default {
 		},
 		async fetchStatuses() {
 			try {
-				const response = await axios.get('http://5.129.207.86/api/reading-list/statuses');
+				const response = await axios.get('http://5.129.207.86/api/reading-list/statuses/');
 				this.statuses = response.data.statuses;
 				console.log('Полученные статусы:', this.statuses);
 			} catch (error) {
