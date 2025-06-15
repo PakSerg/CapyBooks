@@ -14,7 +14,7 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await axios.post('http://localhost:8000/users/auth/login/', {
+        const response = await axios.post('http://5.129.207.86/api/users/auth/login/', {
           username: this.username,
           password: this.password
         });

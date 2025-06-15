@@ -20,7 +20,7 @@ export default {
 		async fetchUserBooks() {
 			this.loading = true
 			try {
-				const response = await axios.get('http://localhost:8000/reading-list');
+				const response = await axios.get('http://5.129.207.86/api/reading-list');
 				this.userBooks = response.data.all_books;
 				console.log(response.data);
 
@@ -45,7 +45,7 @@ export default {
 		},
 		async fetchStatuses() {
 			try {
-				const response = await axios.get('http://localhost:8000/reading-list/statuses');
+				const response = await axios.get('http://5.129.207.86/api/reading-list/statuses');
 				this.statuses = response.data.statuses;
 				console.log('Полученные статусы:', this.statuses);
 			} catch (error) {
@@ -54,7 +54,7 @@ export default {
 		},
 		async handleDelete(bookId) {
 			try {
-				await axios.post('http://localhost:8000/reading-list/delete-book/', {
+				await axios.post('http://5.129.207.86/api/reading-list/delete-book/', {
 					book_id: bookId
 				});
 				this.userBooks = this.userBooks.filter(book => book.id !== bookId);
@@ -70,7 +70,7 @@ export default {
 		},
 		async updateBookStatus(bookId, statusId) {
 			try {
-				await axios.post('http://localhost:8000/reading-list/update-book/', {
+				await axios.post('http://5.129.207.86/api/reading-list/update-book/', {
 					book_id: bookId,
 					status_id: statusId
 				});

@@ -26,7 +26,7 @@ export default {
   methods: {
     async fetchPopularBooks() {
       try {
-        const response = await axios.get('http://localhost:8000/books/popular/')
+        const response = await axios.get('http://5.129.207.86/api/books/popular/')
         this.popularBooks = response.data.popular_books
         console.log(this.popularBooks)
       } catch (error) {

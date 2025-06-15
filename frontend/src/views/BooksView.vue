@@ -51,7 +51,7 @@ export default {
     }, 
     async fetchGenres() {
       try {
-        const response = await axios.get('http://localhost:8000/books/genres/');
+        const response = await axios.get('http://5.129.207.86/api/books/genres/');
         this.genres = response.data.genres;
       } catch (error) {
         console.error('Ошибка при загрузке жанров');

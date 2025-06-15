@@ -28,7 +28,7 @@ export default {
       }
       
       try {
-        await axios.post('http://localhost:8000/reading-list/add-book/', {
+        await axios.post('http://5.129.207.86/api/reading-list/add-book/', {
           book_id: this.book.id
         });
         console.log('Книга добавлена в список для чтения:', this.book.name);
@@ -40,7 +40,7 @@ export default {
     },
     async removeFromList() {
       try {
-        await axios.post('http://localhost:8000/reading-list/delete-book/', {
+        await axios.post('http://5.129.207.86/api/reading-list/delete-book/', {
           book_id: this.book.id
         });
         console.log('Книга удалена из списка для чтения:', this.book.name);
